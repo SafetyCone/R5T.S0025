@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using Microsoft.Extensions.Hosting;
+
 using R5T.D0088;
 using R5T.D0090;
 using R5T.D0103.I001;
