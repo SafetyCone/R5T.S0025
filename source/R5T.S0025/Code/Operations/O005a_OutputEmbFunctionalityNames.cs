@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using R5T.Magyar.IO;
 
 using R5T.D0105;
+using R5T.T0020;
 using R5T.T0092.X001;
 
 
@@ -15,7 +16,8 @@ namespace R5T.S0025
     /// Create tuples of (EMB extension, EMB, project), filter by selected project and selected EMB, then output all functionality names to a file.
     /// Functionality names are: {EMB}_{EMB extension method name}_{project name}.
     /// </summary>
-    public class O005a_OutputEmbFunctionalityNames : T0020.IOperation
+    [OperationMarker]
+    public class O005a_OutputEmbFunctionalityNames : IActionOperation
     {
         private INotepadPlusPlusOperator NotepadPlusPlusOperator { get; }
         private IRepository Repository { get; }

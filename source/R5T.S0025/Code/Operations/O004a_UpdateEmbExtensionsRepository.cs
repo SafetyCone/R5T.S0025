@@ -2,13 +2,15 @@
 using System.Threading.Tasks;
 
 using R5T.D0109;
+using R5T.T0020;
 
 using R5T.S0025.Library;
 
 
 namespace R5T.S0025
 {
-    public class O004a_UpdateEmbExtensionsRepository
+    [OperationMarker]
+    public class O004a_UpdateEmbExtensionsRepository : IOperation
     {
         private IExtensionMethodBaseExtensionRepository ExtensionMethodBaseExtensionRepository { get; }
 

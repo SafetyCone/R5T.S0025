@@ -3,13 +3,15 @@ using System.Threading.Tasks;
 
 using R5T.D0105;
 using R5T.D0110;
+using R5T.T0020;
 
 using R5T.S0025.Library;
 
 
 namespace R5T.S0025
 {
-    public class O003b_PromptForHumanActions
+    [OperationMarker]
+    public class O003b_PromptForHumanActions : IOperation
     {
         private INotepadPlusPlusOperator NotepadPlusPlusOperator { get; }
         private ISummaryFilePathProvider SummaryFilePathProvider { get; }

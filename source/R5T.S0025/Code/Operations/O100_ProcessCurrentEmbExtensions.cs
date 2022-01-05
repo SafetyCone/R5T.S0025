@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using R5T.T0020;
+
 
 namespace R5T.S0025
 {
@@ -10,7 +12,8 @@ namespace R5T.S0025
     /// * Update the extension method base extensions repository, including prompts for human action.
     /// * Output extension method base extension functionality names.
     /// </summary>
-    public class O100_ProcessCurrentEmbExtensions : T0020.IOperation
+    [OperationMarker]
+    public class O100_ProcessCurrentEmbExtensions : IActionOperation
     {
         private O001a_AnalyzeAllCurrentEmbExtensionsCore O001A_AnalyzeAllCurrentEmbExtensionsCore { get; }
         private O001b_SummarizeChanges O001B_SummarizeChanges { get; }

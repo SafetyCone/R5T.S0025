@@ -5,13 +5,15 @@ using R5T.D0084.D001;
 using R5T.D0101;
 using R5T.D0108;
 using R5T.D0109;
+using R5T.T0020;
 
 using R5T.S0025.Library;
 
 
 namespace R5T.S0025
 {
-    public class O001a_AnalyzeAllCurrentEmbExtensionsCore
+    [OperationMarker]
+    public class O001a_AnalyzeAllCurrentEmbExtensionsCore : IOperation
     {
         private IAllProjectDirectoryPathsProvider AllProjectDirectoryPathsProvider { get; }
         private IExtensionMethodBaseExtensionRepository ExtensionMethodBaseExtensionRepository { get; }

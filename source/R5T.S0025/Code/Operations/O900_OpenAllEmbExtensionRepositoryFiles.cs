@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 
 using R5T.D0105;
 using R5T.D0109.I001;
+using R5T.T0020;
 
 
 namespace R5T.S0025
 {
-    public class O900_OpenAllEmbExtensionRepositoryFiles : T0020.IOperation
+    [OperationMarker]
+    public class O900_OpenAllEmbExtensionRepositoryFiles : IActionOperation
     {
         private IExtensionMethodBaseExtensionRepositoryFilePathsProvider ExtensionMethodBaseExtensionRepositoryFilePathsProvider { get; }
         private INotepadPlusPlusOperator NotepadPlusPlusOperator { get; }

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using R5T.T0020;
+
 using R5T.S0025.Library;
 
 
 namespace R5T.S0025
 {
-    public class O003a_PerformRequiredHumanActions
+    [OperationMarker]
+    public class O003a_PerformRequiredHumanActions : IOperation
     {
         private O003b_PromptForHumanActions O003B_PromptForHumanActions { get; }
 
