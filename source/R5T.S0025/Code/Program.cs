@@ -44,10 +44,14 @@ namespace R5T.S0025
 
         private async Task RunOperation()
         {
+            await this.ServiceProvider.Run<O000_Main>();
+
             //await this.ServiceProvider.Run<O900_OpenAllEmbExtensionRepositoryFiles>();
 
-            await this.ServiceProvider.Run<O100_ProcessCurrentEmbExtensions>();
+            //await this.ServiceProvider.Run<O100_ProcessCurrentEmbExtensions>();
 
+            //await this.ServiceProvider.Run<O007_UpdateRepositoryWithAllEmbExtensions>();
+            //await this.ServiceProvider.Run<O006_UpdateEmbFunctionalityIntellisense>();
             //await this.ServiceProvider.Run<O001_AnalyzeAllCurrentEmbExtensions>();
         }
     }

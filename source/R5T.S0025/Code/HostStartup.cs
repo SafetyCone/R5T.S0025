@@ -9,9 +9,12 @@ using R5T.Ostrogothia.Rivet;
 
 using R5T.A0003;
 using R5T.D0048.Default;
+using R5T.D0077.A002;
+using R5T.D0078.A002;
+using R5T.D0079.A002;
 using R5T.D0081.I001;
-using R5T.D0084.A001;
 using R5T.D0084.D002.I001;
+using R5T.D0084.I0001; 
 using R5T.D0088.I0002;
 using R5T.D0101.I0001;
 using R5T.D0101.I001;
@@ -68,17 +71,36 @@ namespace R5T.S0025
                 servicesPlatform.BaseCommandLineOperatorAction,
                 notepadPlusPlusExecutableFilePathProviderAction);
 
+            // Visual Studio operators.
+            var dotnetOperatorActions = Instances.ServiceAction.AddDotnetOperatorActions(
+                servicesPlatform.CommandLineOperatorAction,
+                servicesPlatform.SecretsDirectoryFilePathProviderAction);
+
+            var visualStudioSolutionFileOperatorActions = Instances.ServiceAction.AddVisualStudioSolutionFileOperatorActions(
+                dotnetOperatorActions.DotnetOperatorAction,
+                servicesPlatform.FileNameOperatorAction,
+                servicesPlatform.StringlyTypedPathOperatorAction);
+
+            var visualStudioProjectFileOperatorActions = Instances.ServiceAction.AddVisualStudioProjectFileOperatorActions(
+                dotnetOperatorActions.DotnetOperatorAction,
+                servicesPlatform.FileNameOperatorAction,
+                servicesPlatform.StringlyTypedPathOperatorAction);
+
             // Core competencies.
+            var extensionMethodBaseFunctionalityExtensionMethodBaseProjectPathProviderAction = Instances.ServiceAction.AddConstructorBasedExtensionMethodBaseFunctionalityExtensionMethodBaseProjectPathProviderAction(
+                @"C:\Code\DEV\Git\GitHub\SafetyCone\R5T.T0039\source\R5T.T0039\R5T.T0039.csproj");
+            var repositoriesDirectoryPathProviderAction = Instances.ServiceAction.AddConstructorBasedRepositoriesDirectoryPathProviderAction(
+                @"C:\Code\DEV\Git\GitHub\SafetyCone");
             var summaryFileNameProviderAction = Instances.ServiceAction.AddConstructorBasedSummaryFileNameProviderAction("Summary-Current Extension Method Base Extensions Analysis.txt");
             var summaryFilePathProviderAction = Instances.ServiceAction.AddSummaryFilePathProviderAction(
                 servicesPlatform.OutputFilePathProviderAction,
                 summaryFileNameProviderAction);
 
-            // Project file paths.
-            var repositoriesDirectoryPathProviderAction = Instances.ServiceAction.AddConstructorBasedRepositoriesDirectoryPathProviderAction(@"C:\Code\DEV\Git\GitHub\SafetyCone");
+            // Extension method base extensions discovery repository.
+            var fileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProviderAction = Instances.ServiceAction.AddHardCodedFileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProviderAction();
 
-            var allProjectFilePathsProviderServiceActions = Instances.ServiceAction.AddAllProjectFilePathsProviderServiceActions(
-                repositoriesDirectoryPathProviderAction);
+            var extensionMethodBaseExtensionDiscoveryRepositoryAction = Instances.ServiceAction.AddFileBasedExtensionMethodBaseExtensionDiscoveryRepositoryAction(
+                fileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProviderAction);
 
             // Extension method base extensions repository.
             var extensionMethodBaseExtensionRepositoryFilePathsProviderAction = Instances.ServiceAction.AddHardCodedExtensionMethodBaseExtensionRepositoryFilePathsProviderAction();
@@ -113,9 +135,19 @@ namespace R5T.S0025
                 extensionMethodBaseRepositoryAction,
                 projectRepositoryAction);
 
+            // Project file paths.
+            var allProjectDirectoryPathsProviderAction = Instances.ServiceAction.AddAllProjectDirectoryPathsProviderAction(
+                projectRepositoryAction,
+                servicesPlatform.StringlyTypedPathOperatorAction);
+
+            // Listing file.
+            var listingFilePathProviderAction = Instances.ServiceAction.AddListingFilePathProviderAction(
+                servicesPlatform.OrganizationSharedDataDirectoryFilePathProviderAction);
+
             // Operations.
+            // Level 01.
             var o001a_AnalyzeAllCurrentEmbExtensionsCoreAction = Instances.ServiceAction.AddO001a_AnalyzeAllCurrentEmbExtensionsCoreAction(
-                allProjectFilePathsProviderServiceActions.AllProjectDirectoryPathsProviderAction,
+                allProjectDirectoryPathsProviderAction,
                 extensionMethodBaseExtensionRepositoryAction,
                 extensionMethodBaseRepositoryAction,
                 projectRepositoryAction);
@@ -137,8 +169,27 @@ namespace R5T.S0025
             var o004a_UpdateEmbExtensionsRepositoryAction = Instances.ServiceAction.AddO004a_UpdateEmbExtensionsRepositoryAction(
                 extensionMethodBaseExtensionRepositoryAction);
             var o005a_OutputEmbFunctionalityNamesAction = Instances.ServiceAction.AddO005a_OutputEmbFunctionalityNamesAction(
+                listingFilePathProviderAction,
                 notepadPlusPlusOperatorAction,
                 repositoryAction);
+            var o006_UpdateEmbFunctionalityIntellisenseAction = Instances.ServiceAction.AddO006_UpdateEmbFunctionalityIntellisenseAction(
+                extensionMethodBaseFunctionalityExtensionMethodBaseProjectPathProviderAction,
+                repositoriesDirectoryPathProviderAction,
+                repositoryAction,
+                visualStudioProjectFileOperatorActions.VisualStudioProjectFileOperatorAction,
+                visualStudioSolutionFileOperatorActions.VisualStudioSolutionFileOperatorAction);
+            var o007a_UpdateRepositoryWithAllEmbExtensionsAction = Instances.ServiceAction.AddO007a_UpdateRepositoryWithAllEmbExtensionsAction(
+                extensionMethodBaseExtensionDiscoveryRepositoryAction,
+                extensionMethodBaseExtensionRepositoryAction,
+                extensionMethodBaseRepositoryAction,
+                notepadPlusPlusOperatorAction,
+                projectRepositoryAction,
+                summaryFilePathProviderAction);
+
+            // Level 02.
+            var o007_UpdateRepositoryWithAllEmbExtensionsAction = Instances.ServiceAction.AddO007_UpdateRepositoryWithAllEmbExtensionsAction(
+                o002_BackupFileBasedRepositoryFilesAction,
+                o007a_UpdateRepositoryWithAllEmbExtensionsAction);
 
             var o100_ProcessCurrentEmbExtensionsAction = Instances.ServiceAction.AddO100_ProcessCurrentEmbExtensionsAction(
                 o001a_AnalyzeAllCurrentEmbExtensionsCoreAction,
@@ -146,11 +197,20 @@ namespace R5T.S0025
                 o002_BackupFileBasedRepositoryFilesAction,
                 o003a_PerformRequiredHumanActionsAction,
                 o004a_UpdateEmbExtensionsRepositoryAction,
-                o005a_OutputEmbFunctionalityNamesAction);
+                o005a_OutputEmbFunctionalityNamesAction,
+                o006_UpdateEmbFunctionalityIntellisenseAction);
+            var o101_ProcessEmbExtensionsAction = Instances.ServiceAction.AddO101_ProcessEmbExtensionsAction(
+                o005a_OutputEmbFunctionalityNamesAction,
+                o006_UpdateEmbFunctionalityIntellisenseAction,
+                o007a_UpdateRepositoryWithAllEmbExtensionsAction);
             
             var o900_OpenAllEmbExtensionRepositoryFilesAction = Instances.ServiceAction.AddO900_OpenAllEmbExtensionRepositoryFilesAction(
                 extensionMethodBaseExtensionRepositoryFilePathsProviderAction,
                 notepadPlusPlusOperatorAction);
+
+            // Level 03.
+            var o000_MainAction = Instances.ServiceAction.AddO000_MainAction(
+                o101_ProcessEmbExtensionsAction);
 
             // Run.
             services
@@ -158,8 +218,12 @@ namespace R5T.S0025
                 .Run(servicesPlatform.ServiceCollectionAuditSerializerAction)
                 // Operations
                 .Run(o001_AnalyzeAllCurrentEmbExtensionsAction)
+                .Run(o006_UpdateEmbFunctionalityIntellisenseAction)
+                .Run(o007_UpdateRepositoryWithAllEmbExtensionsAction)
                 .Run(o100_ProcessCurrentEmbExtensionsAction)
+                .Run(o101_ProcessEmbExtensionsAction)
                 .Run(o900_OpenAllEmbExtensionRepositoryFilesAction)
+                .Run(o000_MainAction);
                 ;
 
             return Task.CompletedTask;

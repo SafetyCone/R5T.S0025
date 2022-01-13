@@ -2,6 +2,8 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
+using R5T.Quadia.D002;
+
 using R5T.D0048;
 using R5T.D0088.I0002;
 using R5T.D0101;
@@ -15,6 +17,55 @@ namespace R5T.S0025
 {
     public static partial class IServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds the <see cref="ListingFilePathProvider"/> implementation of <see cref="IListingFilePathProvider"/> as a <see cref="ServiceLifetime.Singleton"/>.
+        /// </summary>
+        public static IServiceCollection AddListingFilePathProvider(this IServiceCollection services,
+            IServiceAction<IOrganizationSharedDataDirectoryFilePathProvider> organizationSharedDataDirectoryFilePathProviderAction)
+        {
+            services
+                .Run(organizationSharedDataDirectoryFilePathProviderAction)
+                .AddSingleton<IListingFilePathProvider, ListingFilePathProvider>();
+
+            return services;
+        }
+
+        /// <summary>
+        /// Adds the <see cref="HardCodedFileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProvider"/> implementation of <see cref="IFileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProvider"/> as a <see cref="ServiceLifetime.Singleton"/>.
+        /// </summary>
+        public static IServiceCollection AddHardCodedFileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProvider(this IServiceCollection services)
+        {
+            services.AddSingleton<IFileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProvider, HardCodedFileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProvider>();
+
+            return services;
+        }
+
+        /// <summary>
+        /// Adds the <see cref="FileBasedExtensionMethodBaseExtensionDiscoveryRepository"/> implementation of <see cref="IExtensionMethodBaseExtensionDiscoveryRepository"/> as a <see cref="ServiceLifetime.Singleton"/>.
+        /// </summary>
+        public static IServiceCollection AddFileBasedExtensionMethodBaseExtensionDiscoveryRepository(this IServiceCollection services,
+            IServiceAction<IFileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProvider> fileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProviderAction)
+        {
+            services
+                .Run(fileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProviderAction)
+                .AddSingleton<IExtensionMethodBaseExtensionDiscoveryRepository, FileBasedExtensionMethodBaseExtensionDiscoveryRepository>();
+
+            return services;
+        }
+
+        /// <summary>
+        /// Adds the <see cref="ConstructorBasedExtensionMethodBaseFunctionalityExtensionMethodBaseProjectPathProvider"/> implementation of <see cref="IExtensionMethodBaseFunctionalityExtensionMethodBaseProjectPathProvider"/> as a <see cref="ServiceLifetime.Singleton"/>.
+        /// </summary>
+        public static IServiceCollection AddConstructorBasedExtensionMethodBaseFunctionalityExtensionMethodBaseProjectPathProvider(this IServiceCollection services,
+            string extensionMethodBaseFunctionalityExtensionMethodBaseProjectPath)
+        {
+            services.AddSingleton<IExtensionMethodBaseFunctionalityExtensionMethodBaseProjectPathProvider>(_ =>
+                new ConstructorBasedExtensionMethodBaseFunctionalityExtensionMethodBaseProjectPathProvider(
+                    extensionMethodBaseFunctionalityExtensionMethodBaseProjectPath));
+
+            return services;
+        }
+
         /// <summary>
         /// Adds the <see cref="Repository"/> implementation of <see cref="IRepository"/> as a <see cref="ServiceLifetime.Singleton"/>.
         /// </summary>

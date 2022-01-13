@@ -21,6 +21,7 @@ namespace R5T.S0025
         private O003a_PerformRequiredHumanActions O003A_PerformRequiredHumanActions { get; }
         private O004a_UpdateEmbExtensionsRepository O004A_UpdateEmbExtensionsRepository { get; }
         private O005a_OutputEmbFunctionalityNames O005A_OutputEmbFunctionalityNames { get; }
+        private O006_UpdateEmbFunctionalityIntellisense O006_UpdateEmbFunctionalityIntellisense { get; }
 
 
         public O100_ProcessCurrentEmbExtensions(
@@ -29,7 +30,8 @@ namespace R5T.S0025
             O002_BackupFileBasedRepositoryFiles o002_BackupFileBasedRepositoryFiles,
             O003a_PerformRequiredHumanActions o003A_PerformRequiredHumanActions,
             O004a_UpdateEmbExtensionsRepository o004A_UpdateEmbExtensionsRepository,
-            O005a_OutputEmbFunctionalityNames o005A_OutputEmbFunctionalityNames)
+            O005a_OutputEmbFunctionalityNames o005A_OutputEmbFunctionalityNames,
+            O006_UpdateEmbFunctionalityIntellisense o006_UpdateEmbFunctionalityIntellisense)
         {
             this.O001A_AnalyzeAllCurrentEmbExtensionsCore = o001A_AnalyzeAllCurrentEmbExtensionsCore;
             this.O001B_SummarizeChanges = o001B_SummarizeChanges;
@@ -37,6 +39,7 @@ namespace R5T.S0025
             this.O003A_PerformRequiredHumanActions = o003A_PerformRequiredHumanActions;
             this.O004A_UpdateEmbExtensionsRepository = o004A_UpdateEmbExtensionsRepository;
             this.O005A_OutputEmbFunctionalityNames = o005A_OutputEmbFunctionalityNames;
+            this.O006_UpdateEmbFunctionalityIntellisense = o006_UpdateEmbFunctionalityIntellisense;
         }
 
         public async Task Run()
@@ -47,6 +50,7 @@ namespace R5T.S0025
             await this.O003A_PerformRequiredHumanActions.Run(analysisOutputData);
             await this.O004A_UpdateEmbExtensionsRepository.Run(analysisOutputData);
             await this.O005A_OutputEmbFunctionalityNames.Run();
+            await this.O006_UpdateEmbFunctionalityIntellisense.Run();
         }
     }
 }

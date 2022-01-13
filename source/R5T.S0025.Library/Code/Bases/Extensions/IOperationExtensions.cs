@@ -20,9 +20,14 @@ using R5T.S0025.Library;
 
 using Instances = R5T.S0025.Library.Instances;
 
+using R5T.D0037;
+
 
 namespace System
 {
+    public record ExtensionMethodBaseExtensionProjectedTuple(ExtensionMethodBaseExtension ExtensionMethodBaseExtension, ExtensionMethodBase ExtensionMethodBase, Project Project);
+
+
     public static class IOperationExtensions
     {
         public static IEnumerable<NamedIdentified> GetEmbExtensionFunctionalityNames(this IOperation _,
@@ -118,57 +123,14 @@ namespace System
             AnalysisInputData inputData,
             AnalysisOutputData analysisData)
         {
+            // New and departed extension method bases.
             var newExtensionMethodBaseExtensions = analysisData.NewEmbExtensions;
-
-            var newEmbExtensionCount = newExtensionMethodBaseExtensions.Length;
-
-            summaryFile.WriteLine($"New extension method base extensions ({newEmbExtensionCount}):");
-            summaryFile.WriteLine();
-
-            if (newExtensionMethodBaseExtensions.None())
-            {
-                summaryFile.WriteLine("<none> (ok)");
-            }
-            else
-            {
-                var pairs = newExtensionMethodBaseExtensions
-                    .Select(x => (extensionTypedMethodName: Instances.MethodNameOperator.GetExtensionTypedMethodName(x.NamespacedTypedParameterizedMethodName), extensionMethodBaseExtension: x))
-                    .OrderAlphabetically(x => x.extensionTypedMethodName)
-                    ;
-
-                foreach (var (extensionTypedMethodName, extensionMethodBaseExtension) in pairs)
-                {
-                    summaryFile.WriteLine($"{extensionTypedMethodName}: {extensionMethodBaseExtension.NamespacedTypedParameterizedMethodName}\n{Strings.DoubleSpaces}{extensionMethodBaseExtension.CodeFilePath}");
-                }
-            }
-            summaryFile.WriteLine("\n***\n");
-
-            // Departed extension method bases.
             var departedExtensionMethodBaseExtensions = analysisData.DepartedEmbExtensions;
 
-            var departedExtensionMethodBasesCount = departedExtensionMethodBaseExtensions.Length;
-
-            summaryFile.WriteLine();
-            summaryFile.WriteLine($"Departed extension method bases ({departedExtensionMethodBasesCount}):");
-            summaryFile.WriteLine();
-
-            if (departedExtensionMethodBaseExtensions.None())
-            {
-                summaryFile.WriteLine("<none> (ok)");
-            }
-            else
-            {
-                var pairs = departedExtensionMethodBaseExtensions
-                    .Select(x => (extensionTypedMethodName: Instances.MethodNameOperator.GetExtensionTypedMethodName(x.NamespacedTypedParameterizedMethodName), extensionMethodBaseExtension: x))
-                    .OrderAlphabetically(x => x.extensionTypedMethodName)
-                    ;
-
-                foreach (var (extensionTypedMethodName, extensionMethodBaseExtension) in pairs)
-                {
-                    summaryFile.WriteLine($"{extensionTypedMethodName}: {extensionMethodBaseExtension.NamespacedTypedParameterizedMethodName}\n{Strings.DoubleSpaces}{extensionMethodBaseExtension.CodeFilePath}");
-                }
-            }
-            summaryFile.WriteLine("\n***\n");
+            _.WriteNewAndDepartedExtensionMethodBaseExtensions(
+                summaryFile,
+                newExtensionMethodBaseExtensions,
+                departedExtensionMethodBaseExtensions);
 
             // Deal with any extenion method bases that cannot be mapped.
             // Unmappable EMB extensions.
@@ -251,57 +213,15 @@ namespace System
             summaryFile.WriteLine("Invalid to-extension method base mappings will be removed.");
             summaryFile.WriteLine("***\n");
 
-            // New to-EMB mappings.
-            var newToEmbMappingsCount = analysisData.NewToEmbMappings.Length;
-
-            summaryFile.WriteLine($"New to-extension method base mappings");
-            summaryFile.WriteLine($"{newToEmbMappingsCount}: count of new to-extension method base mappings.");
-            summaryFile.WriteLine();
-
-            if (analysisData.NewToEmbMappings.None())
-            {
-                summaryFile.WriteLine("<none> (ok)");
-            }
-            else
-            {
-                foreach (var mapping in analysisData.NewToEmbMappings)
-                {
-                    var embExtension = currentEmbExtensionsByIdentity[mapping.ExtensionMethodBaseExtensionIdentity];
-                    var emb = embsByIdentity[mapping.ExtensionMethodBaseIdentity];
-
-                    summaryFile.WriteLine($"{embExtension.NamespacedTypedParameterizedMethodName}:{emb.NamespacedTypeName}, ({mapping.ToStringRepresentation()})");
-                }
-            }
-            summaryFile.WriteLine();
-            summaryFile.WriteLine("New to-extension method base mappings will be added.");
-            summaryFile.WriteLine("***\n");
-
-            // Departed to-EMB mappings.
-            var departedToEmbMappingsount = analysisData.DepartedToEmbMappings.Length;
-
-            summaryFile.WriteLine($"Departed to-extension method base mappings");
-            summaryFile.WriteLine($"{departedToEmbMappingsount}: count of departed to-extension method base mappings.");
-            summaryFile.WriteLine();
-
             var repositoryEmbExtensionsByIdentity = inputData.RepositoryEmbExtensions.ToDictionaryByIdentity();
 
-            if (analysisData.DepartedEmbExtensions.None())
-            {
-                summaryFile.WriteLine("<none> (ok)");
-            }
-            else
-            {
-                foreach (var mapping in analysisData.DepartedToEmbMappings)
-                {
-                    var embExtension = currentEmbExtensionsByIdentity[mapping.ExtensionMethodBaseExtensionIdentity]; // Repository, not current.
-                    var emb = embsByIdentity[mapping.ExtensionMethodBaseIdentity];
-
-                    summaryFile.WriteLine($"{embExtension.NamespacedTypedParameterizedMethodName}:{emb.NamespacedTypeName}, ({mapping.ToStringRepresentation()})");
-                }
-            }
-            summaryFile.WriteLine();
-            summaryFile.WriteLine("Departed to-extension method base mappings will be removed.");
-            summaryFile.WriteLine("***\n");
+            _.WriteNewAndDepartedToExtensionMethodBaseMappings(
+                summaryFile,
+                analysisData.NewToEmbMappings,
+                analysisData.DepartedToEmbMappings,
+                embsByIdentity,
+                currentEmbExtensionsByIdentity,
+                repositoryEmbExtensionsByIdentity);
 
             // Unmapped and invalid extension method to project mappings.
             var embExtensionsUnmappedToProject = analysisData.EmbExtensionsUnmappedToProject;
@@ -358,55 +278,220 @@ namespace System
             summaryFile.WriteLine("Invalid to-project mappings will be removed.");
             summaryFile.WriteLine("***\n");
 
+            _.WriteNewAndDepartedToProjectMappings(
+                summaryFile,
+                analysisData.NewToProjectMappings,
+                analysisData.DepartedToProjectMappings,
+                projectsByIdentity,
+                currentEmbExtensionsByIdentity,
+                repositoryEmbExtensionsByIdentity);
+        }
+
+        public static void WriteSummary(this IOperation _,
+            TextWriter writer, 
+            AnalysisData analysisData)
+        {
+            _.WriteNewAndDepartedExtensionMethodBaseExtensions(
+                writer,
+                analysisData.NewExtensionMethodBaseExtensions,
+                analysisData.DepartedExtensionMethodBaseExtensions);
+
+            _.WriteNewAndDepartedToProjectMappings(
+                writer,
+                analysisData.NewToProjectMappings,
+                analysisData.DepartedToProjectMappings,
+                analysisData.ProjectsByIdentity,
+                analysisData.CurrentExtensionMethodBaseExtensionsByIdentity,
+                analysisData.RepositoryExtensionMethodBaseExtensionsByIdentity);
+
+            _.WriteNewAndDepartedToExtensionMethodBaseMappings(
+                writer,
+                analysisData.NewToExtensionMethodBaseMappings,
+                analysisData.DepartedToExtensionMethodBaseMappings,
+                analysisData.ExtensionMethodBasesByIdentity,
+                analysisData.CurrentExtensionMethodBaseExtensionsByIdentity,
+                analysisData.RepositoryExtensionMethodBaseExtensionsByIdentity);
+        }
+
+        public static void WriteNewAndDepartedToProjectMappings(this IOperation _,
+            TextWriter writer,
+            IList<ExtensionMethodBaseExtensionToProjectMapping> newToProjectMappings,
+            IList<ExtensionMethodBaseExtensionToProjectMapping> departedToProjectMappings,
+            IDictionary<Guid, Project> projectsByIdentity,
+            IDictionary<Guid, ExtensionMethodBaseExtension> currentEmbExtensionsByIdentity,
+            IDictionary<Guid, ExtensionMethodBaseExtension> repositoryEmbExtensionsByIdentity)
+        {
             // New to-project mappings.
-            var newToProjectMappingsCount = analysisData.NewToProjectMappings.Length;
+            var newToProjectMappingsCount = newToProjectMappings.Count;
 
-            summaryFile.WriteLine("New to-project mappings");
-            summaryFile.WriteLine($"({newToProjectMappingsCount}): count of new to-project mappings.");
-            summaryFile.WriteLine();
+            writer.WriteLine("New to-project mappings");
+            writer.WriteLine($"({newToProjectMappingsCount}): count of new to-project mappings.");
+            writer.WriteLine();
 
-            if (analysisData.NewToProjectMappings.None())
+            if (newToProjectMappings.None())
             {
-                summaryFile.WriteLine("<none> (ok)");
+                writer.WriteLine("<none> (ok)");
             }
             else
             {
-                foreach (var mapping in analysisData.NewToProjectMappings)
+                foreach (var mapping in newToProjectMappings)
                 {
                     var embExtension = currentEmbExtensionsByIdentity[mapping.ExtensionMethodBaseExtensionIdentity];
                     var project = projectsByIdentity[mapping.ProjectIdentity];
 
-                    summaryFile.WriteLine($"{embExtension.NamespacedTypedParameterizedMethodName}: {project.Name}, ({mapping.ToStringRepresentation()})");
+                    writer.WriteLine($"{embExtension.NamespacedTypedParameterizedMethodName}: {project.Name}, ({mapping.ToStringRepresentation()})");
                 }
             }
-            summaryFile.WriteLine();
-            summaryFile.WriteLine("New to-project mappings will be added.");
-            summaryFile.WriteLine("***\n");
+            writer.WriteLine();
+            writer.WriteLine("New to-project mappings will be added.");
+            writer.WriteLine("***\n");
 
             // Departed to-project mappings.
-            var departedToProjectMappingsCount = analysisData.DepartedToProjectMappings.Length;
+            var departedToProjectMappingsCount = departedToProjectMappings.Count;
 
-            summaryFile.WriteLine("Departed to-project mappings");
-            summaryFile.WriteLine($"({departedToProjectMappingsCount}): count of departed to-project mappings.");
-            summaryFile.WriteLine();
+            writer.WriteLine("Departed to-project mappings");
+            writer.WriteLine($"({departedToProjectMappingsCount}): count of departed to-project mappings.");
+            writer.WriteLine();
 
-            if (analysisData.DepartedToProjectMappings.None())
+            if (departedToProjectMappings.None())
             {
-                summaryFile.WriteLine("<none> (ok)");
+                writer.WriteLine("<none> (ok)");
             }
             else
             {
-                foreach (var mapping in analysisData.DepartedToProjectMappings)
+                foreach (var mapping in departedToProjectMappings)
                 {
-                    var embExtension = currentEmbExtensionsByIdentity[mapping.ExtensionMethodBaseExtensionIdentity]; // Use repsitory, not current.
+                    var embExtension = repositoryEmbExtensionsByIdentity[mapping.ExtensionMethodBaseExtensionIdentity]; // Use repsitory, not current.
                     var project = projectsByIdentity[mapping.ProjectIdentity];
 
-                    summaryFile.WriteLine($"{embExtension.NamespacedTypedParameterizedMethodName}: {project.Name}, ({mapping.ToStringRepresentation()})");
+                    writer.WriteLine($"{embExtension.NamespacedTypedParameterizedMethodName}: {project.Name}, ({mapping.ToStringRepresentation()})");
                 }
             }
-            summaryFile.WriteLine();
-            summaryFile.WriteLine("Departed to-project mappings will be added.");
-            summaryFile.WriteLine("***\n");
+            writer.WriteLine();
+            writer.WriteLine("Departed to-project mappings will be added.");
+            writer.WriteLine("***\n");
+        }
+
+        public static void WriteNewAndDepartedToExtensionMethodBaseMappings(this IOperation _,
+            TextWriter writer,
+            IList<ExtensionMethodBaseExtensionToExtensionMethodBaseMapping> newToEmbMappings,
+            IList<ExtensionMethodBaseExtensionToExtensionMethodBaseMapping> departedToEmbMappings,
+            IDictionary<Guid, ExtensionMethodBase> embsByIdentity,
+            IDictionary<Guid, ExtensionMethodBaseExtension> currentEmbExtensionsByIdentity,
+            IDictionary<Guid, ExtensionMethodBaseExtension> repositoryEmbExtensionsByIdentity)
+        {
+            // New to-EMB mappings.
+            var newToEmbMappingsCount = newToEmbMappings.Count;
+
+            writer.WriteLine($"New to-extension method base mappings");
+            writer.WriteLine($"{newToEmbMappingsCount}: count of new to-extension method base mappings.");
+            writer.WriteLine();
+
+            if (newToEmbMappings.None())
+            {
+                writer.WriteLine("<none> (ok)");
+            }
+            else
+            {
+                foreach (var mapping in newToEmbMappings)
+                {
+                    var embExtension = currentEmbExtensionsByIdentity[mapping.ExtensionMethodBaseExtensionIdentity];
+                    var emb = embsByIdentity[mapping.ExtensionMethodBaseIdentity];
+
+                    writer.WriteLine($"{embExtension.NamespacedTypedParameterizedMethodName}:{emb.NamespacedTypeName}, ({mapping.ToStringRepresentation()})");
+                }
+            }
+            writer.WriteLine();
+            writer.WriteLine("New to-extension method base mappings will be added.");
+            writer.WriteLine("***\n");
+
+            // Departed to-EMB mappings.
+            var departedToEmbMappingsCount = departedToEmbMappings.Count;
+
+            writer.WriteLine($"Departed to-extension method base mappings");
+            writer.WriteLine($"{departedToEmbMappingsCount}: count of departed to-extension method base mappings.");
+            writer.WriteLine();
+
+            if (departedToEmbMappings.None())
+            {
+                writer.WriteLine("<none> (ok)");
+            }
+            else
+            {
+                foreach (var mapping in departedToEmbMappings)
+                {
+                    var hasEmbExtension = repositoryEmbExtensionsByIdentity.TryGetValue(mapping.ExtensionMethodBaseExtensionIdentity, out var embExtension); // Repository, not current.
+                    var hasEmb = embsByIdentity.TryGetValue(mapping.ExtensionMethodBaseIdentity, out var emb);
+
+                    var embExtensionName = hasEmbExtension
+                        ? embExtension.NamespacedTypedParameterizedMethodName
+                        : "<No name, departed>"
+                        ;
+
+                    var embName = hasEmb
+                        ? emb.NamespacedTypeName
+                        : "<No name, departed>"
+                        ;
+
+                    writer.WriteLine($"{embExtensionName}:{embName}, ({mapping.ToStringRepresentation()})");
+                }
+            }
+            writer.WriteLine();
+            writer.WriteLine("Departed to-extension method base mappings will be removed.");
+            writer.WriteLine("***\n");
+        }
+
+        public static void WriteNewAndDepartedExtensionMethodBaseExtensions(this IOperation _,
+            TextWriter writer,
+            IList<ExtensionMethodBaseExtension> newExtensionMethodBaseExtensions,
+            IList<ExtensionMethodBaseExtension> departedExtensionMethodBaseExtensions)
+        {
+            var newEmbExtensionCount = newExtensionMethodBaseExtensions.Count;
+
+            writer.WriteLine($"New extension method base extensions ({newEmbExtensionCount}):");
+            writer.WriteLine();
+
+            if (newExtensionMethodBaseExtensions.None())
+            {
+                writer.WriteLine("<none> (ok)");
+            }
+            else
+            {
+                var pairs = newExtensionMethodBaseExtensions
+                    .Select(x => (extensionTypedMethodName: Instances.MethodNameOperator.GetExtensionTypedMethodName(x.NamespacedTypedParameterizedMethodName), extensionMethodBaseExtension: x))
+                    .OrderAlphabetically(x => x.extensionTypedMethodName)
+                    ;
+
+                foreach (var (extensionTypedMethodName, extensionMethodBaseExtension) in pairs)
+                {
+                    writer.WriteLine($"{extensionTypedMethodName}: {extensionMethodBaseExtension.NamespacedTypedParameterizedMethodName}\n{Strings.DoubleSpaces}{extensionMethodBaseExtension.CodeFilePath}");
+                }
+            }
+            writer.WriteLine("\n***\n");
+
+            var departedExtensionMethodBasesCount = departedExtensionMethodBaseExtensions.Count;
+
+            writer.WriteLine();
+            writer.WriteLine($"Departed extension method bases ({departedExtensionMethodBasesCount}):");
+            writer.WriteLine();
+
+            if (departedExtensionMethodBaseExtensions.None())
+            {
+                writer.WriteLine("<none> (ok)");
+            }
+            else
+            {
+                var pairs = departedExtensionMethodBaseExtensions
+                    .Select(x => (extensionTypedMethodName: Instances.MethodNameOperator.GetExtensionTypedMethodName(x.NamespacedTypedParameterizedMethodName), extensionMethodBaseExtension: x))
+                    .OrderAlphabetically(x => x.extensionTypedMethodName)
+                    ;
+
+                foreach (var (extensionTypedMethodName, extensionMethodBaseExtension) in pairs)
+                {
+                    writer.WriteLine($"{extensionTypedMethodName}: {extensionMethodBaseExtension.NamespacedTypedParameterizedMethodName}\n{Strings.DoubleSpaces}{extensionMethodBaseExtension.CodeFilePath}");
+                }
+            }
+            writer.WriteLine("\n***\n");
         }
 
         public static AnalysisOutputData PerformAnalysis(this IOperation _,
@@ -479,7 +564,7 @@ namespace System
 
             // Fill in identities for the current extension method base extensions, using identies from corresponding repository extension method base extensions if available, or generating new identies if not.
             // This is required for evaluating existing to-extension method base (and to-project) mappings below.
-            currentExtensionMethodBaseExtensions.FillCurrentIdentities(repositoryExtensionMethodBaseExtensions);
+            currentExtensionMethodBaseExtensions.FillIdentitiesFromSourceOrSetNew(repositoryExtensionMethodBaseExtensions);
 
             // Map the current extension method base extensions to their extension method bases.
             var gettingEmbExtensionsToEmbMappings = _.MapEmbExtensionsToEmbs(
@@ -512,6 +597,26 @@ namespace System
                 RepositoryToProjectMappings = repositoryToProjectMappings,
                 EmbExtensionsUnmappableToEmbs = unmappableEmbExtensions,
             };
+
+            return output;
+        }
+
+        public static
+            IEnumerable<(ExtensionMethodBaseExtension ExtensionMethodBaseExtension, ExtensionMethodBase ExtensionMethodBase, Project Project)>
+        GetExtensionMethoBaseExtensionTuples(this IOperation _,
+            IEnumerable<Project> projects,
+            IEnumerable<ExtensionMethodBase> extensionMethodBases,
+            IEnumerable<ExtensionMethodBaseExtension> extensionMethodBaseExtensions,
+            IEnumerable<ExtensionMethodBaseExtensionToProjectMapping> toProjectMappings,
+            IEnumerable<ExtensionMethodBaseExtensionToExtensionMethodBaseMapping> toEmbMappings)
+        {
+            var output = from embExtension in extensionMethodBaseExtensions
+                         join toEmbMapping in toEmbMappings on embExtension.Identity equals toEmbMapping.ExtensionMethodBaseExtensionIdentity
+                         join emb in extensionMethodBases on toEmbMapping.ExtensionMethodBaseIdentity equals emb.Identity
+                         join toProjectMapping in toProjectMappings on embExtension.Identity equals toProjectMapping.ExtensionMethodBaseExtensionIdentity
+                         join project in projects on toProjectMapping.ProjectIdentity equals project.Identity
+                         select (embExtension, emb, project)
+                    ;
 
             return output;
         }
@@ -1158,6 +1263,103 @@ namespace System
 
             var output = currentExtensionMethodBaseExtensions.ToArray();
             return output;
+        }
+
+        public static Dictionary<string, Project> GetProjectsByDirectoryPath(this IOperation _,
+            IEnumerable<Project> projects)
+        {
+            var output = projects.ToDictionaryByFilePathModified(
+                xFilePath => Instances.PathOperator.GetDirectoryPathOfFilePath(xFilePath));
+
+            return output;
+        }
+
+        public static (
+            Project[] unignoredProjects,
+            ExtensionMethodBase[] unignoredExtensionMethodBases)
+        GetUnignoredProjectsAndExtensionMethodBases(this IOperation _,
+            IEnumerable<Project> projects,
+            IEnumerable<ExtensionMethodBase> extensionMethodBases,
+            IEnumerable<Guid> ignoredProjectIdentities,
+            IEnumerable<Guid> ignoredExtensionMethodBaseIdentities)
+        {
+            var ignoredProjectIdentitiesHash = new HashSet<Guid>(ignoredProjectIdentities);
+            var ignoredExtensionMethodBaseIdentitiesHash = new HashSet<Guid>(ignoredExtensionMethodBaseIdentities);
+
+            var unignoredProjects = projects
+                .ExceptWhere(xProject => ignoredProjectIdentitiesHash.Contains(xProject.Identity))
+                .Now();
+
+            var unignoredExtensionMethodBases = extensionMethodBases
+                .ExceptWhere(xExtensionMethodBase => ignoredExtensionMethodBaseIdentitiesHash.Contains(xExtensionMethodBase.Identity))
+                .Now();
+
+            return (unignoredProjects, unignoredExtensionMethodBases);
+        }
+
+        public static async
+            Task<ExtensionMethodBaseExtensionProjectedTuple[]>
+        GetExtensionMethodBaseExtensionTuples(this IOperation _,
+            IEnumerable<Project> projects,
+            IEnumerable<ExtensionMethodBase> extensionMethodBases,
+            IEnumerable<Guid> ignoredProjectIdentities,
+            IEnumerable<Guid> ignoredExtensionMethodBaseIdentities)
+        {
+            var (unignoredProjects, unignoredExtensionMethodBases) = _.GetUnignoredProjectsAndExtensionMethodBases(
+                projects,
+                extensionMethodBases,
+                ignoredProjectIdentities,
+                ignoredExtensionMethodBaseIdentities);
+
+            var output = await _.GetExtensionMethodBaseExtensionTuples(
+                unignoredProjects,
+                unignoredExtensionMethodBases);
+
+            return output;
+        }
+
+        public static async
+            Task<ExtensionMethodBaseExtensionProjectedTuple[]>
+        GetExtensionMethodBaseExtensionTuples(this IOperation _,
+            IEnumerable<Project> unignoredProjects,
+            IEnumerable<ExtensionMethodBase> unignoredExtensionMethodBases)
+        {
+            var unignoredProjectsByDirectoryPath = _.GetProjectsByDirectoryPath(unignoredProjects);
+            var unignoredExtensionMethodBasesByNamespacedTypeName = unignoredExtensionMethodBases.ToDictionaryByName();
+
+            var output = await _.GetExtensionMethodBaseExtensionTuples(
+                unignoredProjectsByDirectoryPath,
+                unignoredExtensionMethodBasesByNamespacedTypeName);
+
+            return output;
+        }
+
+        public static async
+            Task<ExtensionMethodBaseExtensionProjectedTuple[]>
+        GetExtensionMethodBaseExtensionTuples(this IOperation _,
+            IDictionary<string, Project> unignoredProjectsByDirectoryPath,
+            IDictionary<string, ExtensionMethodBase> unignoredExtensionMethodBasesByNamespacedTypeName)
+        {
+            var output = new List<ExtensionMethodBaseExtensionProjectedTuple>();
+
+            foreach (var pair in unignoredProjectsByDirectoryPath.OrderAlphabetically(xPair => xPair.Key))
+            {
+                var projectDirectoryPath = pair.Key;
+
+                var extensionMethodBaseExtensionTuples = await Instances.ExtensionMethodBaseOperator.GetExtensionMethodBaseExtensionTuples(
+                    projectDirectoryPath,
+                    unignoredExtensionMethodBasesByNamespacedTypeName);
+
+                var extensionMethodBaseExtensionProjectedTuples = extensionMethodBaseExtensionTuples
+                    .Select(xTuple => new ExtensionMethodBaseExtensionProjectedTuple(
+                        xTuple.ExtensionMethodBaseExtension,
+                        xTuple.ExtensionMethodBase,
+                        pair.Value));
+
+                output.AddRange(extensionMethodBaseExtensionProjectedTuples);
+            }
+
+            return output.ToArray();
         }
     }
 }

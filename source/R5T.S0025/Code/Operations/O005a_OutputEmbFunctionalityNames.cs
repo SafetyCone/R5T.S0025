@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
-using R5T.Magyar.IO;
 
 using R5T.D0105;
 using R5T.T0020;
@@ -19,65 +17,54 @@ namespace R5T.S0025
     [OperationMarker]
     public class O005a_OutputEmbFunctionalityNames : IActionOperation
     {
+        private IListingFilePathProvider ListingFilePathProvider { get; }
         private INotepadPlusPlusOperator NotepadPlusPlusOperator { get; }
         private IRepository Repository { get; }
 
 
         public O005a_OutputEmbFunctionalityNames(
+            IListingFilePathProvider listingFilePathProvider,
             INotepadPlusPlusOperator notepadPlusPlusOperator,
             IRepository repository)
         {
+            this.ListingFilePathProvider = listingFilePathProvider;
             this.NotepadPlusPlusOperator = notepadPlusPlusOperator;
             this.Repository = repository;
         }
 
         public async Task Run()
         {
+            // Get extension method base functionality names (with paired EMB extension identity).
             var (
-                selectedProjects,
-                selectedEmbs,
-                ignoredEmbs,
-                embExtensions,
-                toEmbMappings,
-                toProjectMappings
+                projects,
+                extensionMethodBases,
+                extensionMethodBaseExtensions,
+                toProjectMappings,
+                toExtensionMethodBaseMappings
                 )
-                = await TaskHelper.WhenAll(
-                    // Use pre-computed selections instead of re-computing selections from ignored and duplicate name data.
-                    this.Repository.ProjectRepository.GetSelectedProjects(),
-                    // Use pre-computed selections instead of re-computing selections from ignored and duplicate name data.
-                    this.Repository.ExtensionMethodBaseRepository.GetSelectedExtensionMethodBases(),
-                    this.Repository.ExtensionMethodBaseExtensionRepository.GetAllIgnoredExtensionMethodBaseNamespacedTypeNames(),
-                    this.Repository.ExtensionMethodBaseExtensionRepository.GetAllExtensionMethodBaseExtensions(),
-                    this.Repository.ExtensionMethodBaseExtensionRepository.GetAllToExtensionMethodBaseMappings(),
-                    this.Repository.ExtensionMethodBaseExtensionRepository.GetAllToProjectMappings());
+                = await this.Repository.GetExtensionMethodBaseFunctionalityData();
 
-            // There are extension method bases for which all extensions should be ignored for this purpose.
-            var ignoredEmbsHash = new HashSet<string>(ignoredEmbs);
-
-            var selectedEmbsForEmbExtensions = selectedEmbs
-                .ExceptWhere(x => ignoredEmbsHash.Contains(x.NamespacedTypeName))
-                ;
-
-            var tuples = Instances.Operation.GetEmbExtensionEmbAndProjectTuples(
-                embExtensions,
-                selectedEmbsForEmbExtensions,
-                selectedProjects,
-                toEmbMappings,
-                toProjectMappings);
+            var tuples = Instances.Operation.GetExtensionMethoBaseExtensionTuples(
+                projects,
+                extensionMethodBases,
+                extensionMethodBaseExtensions,
+                toProjectMappings,
+                toExtensionMethodBaseMappings);
 
             var embExtensionFunctionalityNames = Instances.Operation.GetEmbExtensionFunctionalityNames(tuples);
+
             var embExtensionFunctionalityLines = embExtensionFunctionalityNames
                 .Select(x => x.ToTokenizedRepresentation())
                 .OrderAlphabetically()
                 ;
 
-            var outputFilePath = @"C:\Temp\Extension Method Base Extensions-Functionality.txt";
+            var listingFilePath = await this.ListingFilePathProvider.GetListingFilePath();
 
             await FileHelper.WriteAllLines(
-                outputFilePath,
+                listingFilePath,
                 embExtensionFunctionalityLines);
 
-            await this.NotepadPlusPlusOperator.OpenFilePath(outputFilePath);
+            await this.NotepadPlusPlusOperator.OpenFilePath(listingFilePath);
         }
     }
 }

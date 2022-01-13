@@ -15,6 +15,7 @@
     <ProjectReference Include="..\..\..\R5T.Magyar\source\R5T.Magyar\R5T.Magyar.csproj" />
     <ProjectReference Include="..\..\..\R5T.T0036\source\R5T.T0036.X006\R5T.T0036.X006.csproj" />
     <ProjectReference Include="..\..\..\R5T.T0039.X0001\source\R5T.T0039.X0001\R5T.T0039.X0001.csproj" />
+    <ProjectReference Include="..\..\..\R5T.T0040.X0001\source\R5T.T0040.X0001\R5T.T0040.X0001.csproj" />
     <ProjectReference Include="..\..\..\R5T.T0040\source\R5T.T0040.X000\R5T.T0040.X000.csproj" />
     <ProjectReference Include="..\..\..\R5T.T0094\source\R5T.T0094.X001\R5T.T0094.X001.csproj" />
     <ProjectReference Include="..\..\..\R5T.T0097\source\R5T.T0097\R5T.T0097.csproj" />
@@ -22,6 +23,12 @@
     <ProjectReference Include="..\..\..\R5T.T0100\source\R5T.T0100\R5T.T0100.csproj" />
     <ProjectReference Include="..\..\..\R5T.T0101\source\R5T.T0101.X001\R5T.T0101.X001.csproj" />
     <ProjectReference Include="..\..\..\R5T.T0102\source\R5T.T0102\R5T.T0102.csproj" />
+    <ProjectReference Include="..\..\..\R5T.T0103.X0001\source\R5T.T0103.X0001\R5T.T0103.X0001.csproj" />
+    <ProjectReference Include="..\..\..\R5T.T0110.I0001\source\R5T.T0110.I0001\R5T.T0110.I0001.csproj" />
+    <ProjectReference Include="..\..\..\R5T.T0110\source\R5T.T0110.X001\R5T.T0110.X001.csproj" />
+    <ProjectReference Include="..\..\..\R5T.T0113.X0001\source\R5T.T0113.X0001\R5T.T0113.X0001.csproj" />
+    <ProjectReference Include="..\..\..\R5T.T0113\source\R5T.T0113.X000\R5T.T0113.X000.csproj" />
+    <ProjectReference Include="..\..\..\R5T.T0115\source\R5T.T0115.X001\R5T.T0115.X001.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
-
-using R5T.Magyar.IO;
 
 using R5T.D0105;
 using R5T.D0110;

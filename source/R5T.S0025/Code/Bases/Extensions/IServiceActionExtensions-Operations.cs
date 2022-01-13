@@ -1,6 +1,9 @@
 ﻿using System;
 
+using R5T.D0078;
+using R5T.D0079;
 using R5T.D0084.D001;
+using R5T.D0084.D002;
 using R5T.D0096;
 using R5T.D0101;
 using R5T.D0105;
@@ -17,6 +20,34 @@ namespace R5T.S0025
     public static partial class IServiceActionExtensions
     {
         /// <summary>
+        /// Adds the <see cref="O000_Main"/> operation as a <see cref="ServiceLifetime.Singleton"/>.
+        /// </summary>
+        public static IServiceAction<O000_Main> AddO000_MainAction(this IServiceAction _,
+            IServiceAction<O101_ProcessEmbExtensions> o101_ProcessEmbExtensionsAction)
+        {
+            var serviceAction = _.New<O000_Main>(services => services.AddO000_Main(
+                o101_ProcessEmbExtensionsAction));
+
+            return serviceAction;
+        }
+
+        /// <summary>
+        /// Adds the <see cref="O101_ProcessEmbExtensions"/> operation as a <see cref="ServiceLifetime.Singleton"/>.
+        /// </summary>
+        public static IServiceAction<O101_ProcessEmbExtensions> AddO101_ProcessEmbExtensionsAction(this IServiceAction _,
+            IServiceAction<O005a_OutputEmbFunctionalityNames> o005a_OutputEmbFunctionalityNamesAction,
+            IServiceAction<O006_UpdateEmbFunctionalityIntellisense> o006_UpdateEmbFunctionalityIntellisenseAction,
+            IServiceAction<O007a_UpdateRepositoryWithAllEmbExtensions> o007a_UpdateRepositoryWithAllEmbExtensionsAction)
+        {
+            var serviceAction = _.New<O101_ProcessEmbExtensions>(services => services.AddO101_ProcessEmbExtensions(
+                o005a_OutputEmbFunctionalityNamesAction,
+                o006_UpdateEmbFunctionalityIntellisenseAction,
+                o007a_UpdateRepositoryWithAllEmbExtensionsAction));
+
+            return serviceAction;
+        }
+
+        /// <summary>
         /// Adds the <see cref="O100_ProcessCurrentEmbExtensions"/> operation as a <see cref="ServiceLifetime.Singleton"/>.
         /// </summary>
         public static IServiceAction<O100_ProcessCurrentEmbExtensions> AddO100_ProcessCurrentEmbExtensionsAction(this IServiceAction _,
@@ -25,7 +56,8 @@ namespace R5T.S0025
             IServiceAction<O002_BackupFileBasedRepositoryFiles> o002_BackupFileBasedRepositoryFilesAction,
             IServiceAction<O003a_PerformRequiredHumanActions> o003a_PerformRequiredHumanActionsAction,
             IServiceAction<O004a_UpdateEmbExtensionsRepository> o004a_UpdateEmbExtensionsRepositoryAction,
-            IServiceAction<O005a_OutputEmbFunctionalityNames> o005a_OutputEmbFunctionalityNamesAction)
+            IServiceAction<O005a_OutputEmbFunctionalityNames> o005a_OutputEmbFunctionalityNamesAction,
+            IServiceAction<O006_UpdateEmbFunctionalityIntellisense> o006_UpdateEmbFunctionalityIntellisenseAction)
         {
             var serviceAction = _.New<O100_ProcessCurrentEmbExtensions>(services => services.AddO100_ProcessCurrentEmbExtensions(
                 o001a_AnalyzeAllCurrentEmbExtensionsCoreAction,
@@ -33,7 +65,64 @@ namespace R5T.S0025
                 o002_BackupFileBasedRepositoryFilesAction,
                 o003a_PerformRequiredHumanActionsAction,
                 o004a_UpdateEmbExtensionsRepositoryAction,
-                o005a_OutputEmbFunctionalityNamesAction));
+                o005a_OutputEmbFunctionalityNamesAction,
+                o006_UpdateEmbFunctionalityIntellisenseAction));
+
+            return serviceAction;
+        }
+
+        /// <summary>
+        /// Adds the <see cref="O007a_UpdateRepositoryWithAllEmbExtensions"/> operation as a <see cref="ServiceLifetime.Singleton"/>.
+        /// </summary>
+        public static IServiceAction<O007a_UpdateRepositoryWithAllEmbExtensions> AddO007a_UpdateRepositoryWithAllEmbExtensionsAction(this IServiceAction _,
+            IServiceAction<IExtensionMethodBaseExtensionDiscoveryRepository> extensionMethodBaseExtensionDiscoveryRepositoryAction,
+            IServiceAction<IExtensionMethodBaseExtensionRepository> extensionMethodBaseExtensionRepositoryAction,
+            IServiceAction<IExtensionMethodBaseRepository> extensionMethodBaseRepositoryAction,
+            IServiceAction<INotepadPlusPlusOperator> notepadPlusPlusOperatorAction,
+            IServiceAction<IProjectRepository> projectRepositoryAction,
+            IServiceAction<ISummaryFilePathProvider> summaryFilePathProviderAction)
+        {
+            var serviceAction = _.New<O007a_UpdateRepositoryWithAllEmbExtensions>(services => services.AddO007a_UpdateRepositoryWithAllEmbExtensions(
+                extensionMethodBaseExtensionDiscoveryRepositoryAction,
+                extensionMethodBaseExtensionRepositoryAction,
+                extensionMethodBaseRepositoryAction,
+                notepadPlusPlusOperatorAction,
+                projectRepositoryAction,
+                summaryFilePathProviderAction));
+
+            return serviceAction;
+        }
+
+        /// <summary>
+        /// Adds the <see cref="O007_UpdateRepositoryWithAllEmbExtensions"/> operation as a <see cref="ServiceLifetime.Singleton"/>.
+        /// </summary>
+        public static IServiceAction<O007_UpdateRepositoryWithAllEmbExtensions> AddO007_UpdateRepositoryWithAllEmbExtensionsAction(this IServiceAction _,
+            IServiceAction<O002_BackupFileBasedRepositoryFiles> o002_BackupFileBasedRepositoryFilesAction,
+            IServiceAction<O007a_UpdateRepositoryWithAllEmbExtensions> o007a_UpdateRepositoryWithAllEmbExtensionsAction)
+        {
+            var serviceAction = _.New<O007_UpdateRepositoryWithAllEmbExtensions>(services => services.AddO007_UpdateRepositoryWithAllEmbExtensions(
+                o002_BackupFileBasedRepositoryFilesAction,
+                o007a_UpdateRepositoryWithAllEmbExtensionsAction));
+
+            return serviceAction;
+        }
+
+        /// <summary>
+        /// Adds the <see cref="O006_UpdateEmbFunctionalityIntellisense"/> operation as a <see cref="ServiceLifetime.Singleton"/>.
+        /// </summary>
+        public static IServiceAction<O006_UpdateEmbFunctionalityIntellisense> AddO006_UpdateEmbFunctionalityIntellisenseAction(this IServiceAction _,
+            IServiceAction<IExtensionMethodBaseFunctionalityExtensionMethodBaseProjectPathProvider> extensionMethodBaseFunctionalityExtensionMethodBaseProjectPathProviderAction,
+            IServiceAction<IRepositoriesDirectoryPathProvider> repositoriesDirectoryPathProviderAction,
+            IServiceAction<IRepository> repositoryAction,
+            IServiceAction<IVisualStudioProjectFileOperator> visualStudioProjectFileOperatorAction,
+            IServiceAction<IVisualStudioSolutionFileOperator> visualStudioSolutionFileOperatorAction)
+        {
+            var serviceAction = _.New<O006_UpdateEmbFunctionalityIntellisense>(services => services.AddO006_UpdateEmbFunctionalityIntellisense(
+                extensionMethodBaseFunctionalityExtensionMethodBaseProjectPathProviderAction,
+                repositoriesDirectoryPathProviderAction,
+                repositoryAction,
+                visualStudioProjectFileOperatorAction,
+                visualStudioSolutionFileOperatorAction));
 
             return serviceAction;
         }
@@ -42,10 +131,12 @@ namespace R5T.S0025
         /// Adds the <see cref="O005a_OutputEmbFunctionalityNames"/> operation as a <see cref="ServiceLifetime.Singleton"/>.
         /// </summary>
         public static IServiceAction<O005a_OutputEmbFunctionalityNames> AddO005a_OutputEmbFunctionalityNamesAction(this IServiceAction _,
+            IServiceAction<IListingFilePathProvider> listingFilePathProviderAction,
             IServiceAction<INotepadPlusPlusOperator> notepadPlusPlusOperatorAction,
             IServiceAction<IRepository> repositoryAction)
         {
             var serviceAction = _.New<O005a_OutputEmbFunctionalityNames>(services => services.AddO005a_OutputEmbFunctionalityNames(
+                listingFilePathProviderAction,
                 notepadPlusPlusOperatorAction,
                 repositoryAction));
 
