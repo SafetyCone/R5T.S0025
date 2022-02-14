@@ -17,7 +17,8 @@ using R5T.S0025.Library;
 namespace R5T.S0025
 {
     /// <summary>
-    /// Updates the list of extension method base extensions, selected those that are not in ignored projects, or on ignored extension method bases.
+    /// Finds all extension method base extensions.
+    /// Updates the list of extension method base extensions, selecting those that are not in ignored projects, or on ignored extension method bases.
     /// Skips the "selection" process for extension method base extensions.
     /// </summary>
     [OperationMarker]

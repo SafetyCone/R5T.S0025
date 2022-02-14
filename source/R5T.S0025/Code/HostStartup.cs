@@ -21,6 +21,7 @@ using R5T.D0101.I001;
 using R5T.D0105.I001;
 using R5T.D0108.I0001;
 using R5T.D0108.I001;
+using R5T.D0109.I0001;
 using R5T.D0109.I001;
 using R5T.D0110.I001;
 using R5T.D0110.I002;
@@ -130,6 +131,7 @@ namespace R5T.S0025
             var extensionMethodBaseRepositoryAction = Instances.ServiceAction.ForwardToIExtensionMethodBaseRepositoryAction(
                 fileBasedExtensionMethodBaseRepositoryAction);
 
+            // Repository.
             var repositoryAction = Instances.ServiceAction.AddRepositoryAction(
                 extensionMethodBaseExtensionRepositoryAction,
                 extensionMethodBaseRepositoryAction,

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using R5T.T0045;
 using R5T.T0092;
@@ -10,7 +11,7 @@ namespace R5T.S0025.Library
 {
     public static class ICodeFileGeneratorExtensions
     {
-        public static void CreateIExtensionMethodBaseFunctionalityExtensions(this ICodeFileGenerator _,
+        public static async Task CreateIExtensionMethodBaseFunctionalityExtensions(this ICodeFileGenerator _,
             IEnumerable<NamedIdentified> extensionMethodBaseFunctionalities,
             string namespaceName,
             string filePath)
@@ -19,7 +20,7 @@ namespace R5T.S0025.Library
                 extensionMethodBaseFunctionalities,
                 namespaceName);
 
-            compilationUnit.WriteTo(filePath);
+            await compilationUnit.WriteTo(filePath);
         }
     }
 }

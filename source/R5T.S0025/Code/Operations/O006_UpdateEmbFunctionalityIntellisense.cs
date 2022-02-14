@@ -101,27 +101,25 @@ namespace R5T.S0025
                                 projectSpecification,
                                 this.VisualStudioProjectFileOperator,
                                 this.VisualStudioSolutionFileOperator,
-                                projectFileContext =>
+                                async projectFileContext =>
                                 {
                                     // Create /Code/Bases/Extensions/IProjectPathExtensions.cs.
                                     // Code file.
-                                    projectFileContext.InProjectSubDirectoryPathContextSynchronous(
+                                    await projectFileContext.InProjectSubDirectoryPathContext(
                                         Instances.ProjectPathsOperator.GetBasesExtensionsDirectoryRelativePath(),
-                                        basesExtensionsDirectoryPathContext =>
+                                        async basesExtensionsDirectoryPathContext =>
                                         {
-                                            basesExtensionsDirectoryPathContext.InProjectSubFilePathContextSynchronous(
+                                            await basesExtensionsDirectoryPathContext.InProjectSubFilePathContext(
                                                 Instances.CodeFileName.IExtensionMethodBaseFunctionalityExtensions(),
-                                                filePathContext =>
+                                                async filePathContext =>
                                                 {
                                                     // Code file generator, compilation unit generator, class generator, and method generator.
-                                                    Instances.CodeFileGenerator.CreateIExtensionMethodBaseFunctionalityExtensions(
+                                                    await Instances.CodeFileGenerator.CreateIExtensionMethodBaseFunctionalityExtensions(
                                                         embExtensionFunctionalityNames,
                                                         projectSpecification.DefaultNamespaceName,
                                                         filePathContext.FilePath);
                                                 });
                                         });
-
-                                    return Task.CompletedTask;
                                 });
                         });
                 });

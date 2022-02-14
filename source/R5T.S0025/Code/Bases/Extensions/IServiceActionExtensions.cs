@@ -88,15 +88,6 @@ namespace R5T.S0025
             return serviceAction;
         }
 
-        /// <summary>
-        /// Adds the <see cref="HardCodedExtensionMethodBaseExtensionRepositoryFilePathsProvider"/> implementation of <see cref="IExtensionMethodBaseExtensionRepositoryFilePathsProvider"/> as a <see cref="ServiceLifetime.Singleton"/>.
-        /// </summary>
-        public static IServiceAction<IExtensionMethodBaseExtensionRepositoryFilePathsProvider> AddHardCodedExtensionMethodBaseExtensionRepositoryFilePathsProviderAction(this IServiceAction _)
-        {
-            var serviceAction = _.New<IExtensionMethodBaseExtensionRepositoryFilePathsProvider>(services => services.AddHardCodedExtensionMethodBaseExtensionRepositoryFilePathsProvider());
-            return serviceAction;
-        }
-
         public static IServiceAction<HostStartup> AddStartupAction(this IServiceAction _)
         {
             var output = _.New<HostStartup>(services => services.AddHostStartup());
