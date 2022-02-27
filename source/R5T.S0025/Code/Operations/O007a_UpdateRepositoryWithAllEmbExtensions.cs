@@ -76,6 +76,18 @@ namespace R5T.S0025
 
             currentExtensionMethodBaseExtensions.FillIdentitiesFromSourceOrSetNew(repositoryExtensionMethodBaseExtensions);
 
+            // Determine if there are any duplicates by identity.
+            var currentExtensionMethodBaseExtensionDuplicatesByIdentity = currentExtensionMethodBaseExtensions
+                .WhereDuplicates(x => x.Identity)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.ToArray());
+
+            if(currentExtensionMethodBaseExtensionDuplicatesByIdentity.Any())
+            {
+                throw new Exception("Duplicate extension method base extensions by identity.");
+            }
+
             var currentToProjectMappings = extensionMethodBaseExtensionTuples
                 .Select(x =>
                 {
