@@ -22,7 +22,7 @@ namespace R5T.S0025.Library
             var output = _.GetExtensionMethodTuples(compilationUnit)
                 .Select(extensionMethodTuple =>
                 {
-                    var namespacedTypedParameterizedMethodName = Instances.MethodNameOperator.GetNamespacedTypedParameterizedMethodName(extensionMethodTuple);
+                    var namespacedTypedParameterizedMethodName = Instances.MethodNameOperator.GetNamespacedTypedParameterizedMethodNameWithTypeParameters(extensionMethodTuple);
 
                     // Try to determine what namespaced type name of the extended type of the extension method based on available namespaces.
                     var extensionParameter = extensionMethodTuple.ExtensionMethod.GetExtensionParameter();

@@ -11,7 +11,7 @@ namespace R5T.S0025.Library
 {
     public static class IMethodGeneratorExtensions
     {
-        public static MethodDeclarationSyntax GetProjectPathExtension(this IMethodGenerator _,
+        public static MethodDeclarationSyntax GetProjectPathExtension_WithoutMethodIndentation(this IMethodGenerator _,
             NamedIdentified extensionMethodBaseFunctionality)
         {
             var text = $@"
@@ -21,8 +21,21 @@ public static string {extensionMethodBaseFunctionality.Name}(this {Instances.Typ
 }}
 ";
 
-            var method = _.GetMethodDeclarationFromText(text);
+            var method = _.GetMethodDeclarationFromText_TrimOnly(text);
             return method;
+        }
+
+        public static MethodDeclarationSyntax GetProjectPathExtension(this IMethodGenerator _,
+            NamedIdentified extensionMethodBaseFunctionality,
+            bool prependNewLineToFirstToken = false)
+        {
+            var output = _.GetProjectPathExtension_WithoutMethodIndentation(extensionMethodBaseFunctionality)
+                .IndentBlock(
+                    Instances.Indentation.Method(),
+                    prependNewLineToFirstToken)
+                ;
+
+            return output;
         }
     }
 }

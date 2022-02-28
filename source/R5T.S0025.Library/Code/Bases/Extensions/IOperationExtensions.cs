@@ -362,9 +362,12 @@ namespace System
                 foreach (var mapping in departedToProjectMappings)
                 {
                     var embExtension = repositoryEmbExtensionsByIdentity[mapping.ExtensionMethodBaseExtensionIdentity]; // Use repsitory, not current.
-                    var project = projectsByIdentity[mapping.ProjectIdentity];
+                    var projectName = projectsByIdentity.ContainsKey(mapping.ProjectIdentity)
+                        ? projectsByIdentity[mapping.ProjectIdentity].Name
+                        : "<Project no longer exists>"
+                        ;
 
-                    writer.WriteLine($"{embExtension.NamespacedTypedParameterizedMethodName}: {project.Name}, ({mapping.ToStringRepresentation()})");
+                    writer.WriteLine($"{embExtension.NamespacedTypedParameterizedMethodName}: {projectName}, ({mapping.ToStringRepresentation()})");
                 }
             }
             writer.WriteLine();

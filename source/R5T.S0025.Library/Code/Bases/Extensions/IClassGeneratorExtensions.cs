@@ -20,12 +20,16 @@ namespace R5T.S0025.Library
 
             var methods = extensionMethodBaseFunctionalities
                 .OrderAlphabetically(x => x.Name)
-                .Select(xProject => Instances.MethodGenerator.GetProjectPathExtension(xProject))
+                .Select(xProject => Instances.MethodGenerator.GetProjectPathExtension(
+                    xProject,
+                    // Allow for use of blank lines below.
+                    false))
                 .ToArray();
 
             var output = _.GetPublicStaticClass(
                 Instances.TypeName.IExtensionMethodBaseFunctionalityExtensions())
                 .AddMembersWithBlankLineSeparation(methods)
+                //.AddMembers(methods)
                 ;
 
             return output;

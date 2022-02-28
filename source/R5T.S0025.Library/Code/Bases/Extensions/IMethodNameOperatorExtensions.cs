@@ -9,6 +9,7 @@ using R5T.T0102;
 
 using Instances = R5T.S0025.Library.Instances;
 
+
 namespace System
 {
     public static class IMethodNameOperatorExtensions
@@ -19,13 +20,17 @@ namespace System
             string projectName)
         {
             var typeName = Instances.NamespacedTypeName.GetTypeName(extensionMethodBaseNamespacedTypeName);
+            var modifiedTypeName = typeName.Replace(Characters.Period, Characters.Underscore);
 
             var methodName = _.GetMethodNameFromFullMethodNameWithoutParentheses(fullMethodName);
+            var modifiedMethodName = methodName;
+            modifiedMethodName = modifiedMethodName.Replace(Characters.At, Characters.Underscore);
 
-            var modifiedTypeName = typeName.Replace(Characters.Period, Characters.Underscore);
-            var modifiedProjectName = projectName.Replace(Characters.Period, Characters.Underscore);
+            var modifiedProjectName = projectName;
+            modifiedProjectName = modifiedProjectName.Replace(Characters.Period, Characters.Underscore);
+            modifiedProjectName = modifiedProjectName.Replace(Characters.Dash, Characters.Underscore);
 
-            var usefulProjectedMethodName = $"{modifiedTypeName}_{methodName}_{modifiedProjectName}";
+            var usefulProjectedMethodName = $"{modifiedTypeName}_{modifiedMethodName}_{modifiedProjectName}";
             return usefulProjectedMethodName;
         }
 
