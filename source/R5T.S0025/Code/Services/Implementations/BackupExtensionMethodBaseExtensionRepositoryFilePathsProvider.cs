@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
-using R5T.D0048;
+using R5T.D0048;using R5T.T0064;
 
 
 namespace R5T.S0025
-{
-    public class BackupExtensionMethodBaseExtensionRepositoryFilePathsProvider : IBackupExtensionMethodBaseExtensionRepositoryFilePathsProvider
+{[ServiceImplementationMarker]
+    public class BackupExtensionMethodBaseExtensionRepositoryFilePathsProvider : IBackupExtensionMethodBaseExtensionRepositoryFilePathsProvider,IServiceImplementation
     {
         private IOutputFilePathProvider OutputFilePathProvider { get; }
 

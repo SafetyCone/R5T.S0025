@@ -1,18 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading.Tasks;using R5T.T0064;
 
 
 
 namespace R5T.S0025
-{
+{[ServiceImplementationMarker]
     /// <summary>
     /// <inheritdoc cref="IExtensionMethodBaseExtensionDiscoveryRepository"/>
     /// <para>File-based implementation.</para>
     /// </summary>
-    public class FileBasedExtensionMethodBaseExtensionDiscoveryRepository : IExtensionMethodBaseExtensionDiscoveryRepository
+    public class FileBasedExtensionMethodBaseExtensionDiscoveryRepository : IExtensionMethodBaseExtensionDiscoveryRepository,IServiceImplementation
     {
         private IFileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProvider FileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProvider { get; }
 

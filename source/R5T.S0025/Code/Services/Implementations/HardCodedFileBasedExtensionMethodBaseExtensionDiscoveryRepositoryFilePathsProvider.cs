@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+using System;
+using System.Threading.Tasks;using R5T.T0064;
 
 
 namespace R5T.S0025
-{
-    public class HardCodedFileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProvider : IFileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProvider
+{[ServiceImplementationMarker]
+    public class HardCodedFileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProvider : IFileBasedExtensionMethodBaseExtensionDiscoveryRepositoryFilePathsProvider,IServiceImplementation
     {
         public Task<string> GetIgnoredExtensionMethodBaseIdentitiesFilePath()
         {

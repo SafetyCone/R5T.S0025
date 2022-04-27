@@ -1,16 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using R5T.Magyar;
+using R5T.Magyar;using R5T.T0064;
 
 
 namespace R5T.S0025
-{
+{[ServiceDefinitionMarker]
     /// <summary>
     /// Repository for values related to the extension method base extension discovery process.
     /// </summary>
-    public interface IExtensionMethodBaseExtensionDiscoveryRepository
+    public interface IExtensionMethodBaseExtensionDiscoveryRepository:IServiceDefinition
     {
         #region Ignored Projects
 
