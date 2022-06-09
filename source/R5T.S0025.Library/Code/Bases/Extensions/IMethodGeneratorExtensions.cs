@@ -30,7 +30,7 @@ public static string {extensionMethodBaseFunctionality.Name}(this {Instances.Typ
             bool prependNewLineToFirstToken = false)
         {
             var output = _.GetProjectPathExtension_WithoutMethodIndentation(extensionMethodBaseFunctionality)
-                .IndentBlock(
+                .IndentBlock_Old(
                     Instances.Indentation.Method(),
                     prependNewLineToFirstToken)
                 ;
