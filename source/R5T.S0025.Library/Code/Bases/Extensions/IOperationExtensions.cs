@@ -462,7 +462,7 @@ namespace System
             {
                 var pairs = newExtensionMethodBaseExtensions
                     .Select(x => (extensionTypedMethodName: Instances.MethodNameOperator.GetExtensionTypedMethodName(x.NamespacedTypedParameterizedMethodName), extensionMethodBaseExtension: x))
-                    .OrderAlphabetically(x => x.extensionTypedMethodName)
+                    .OrderAlphabetically2(x => x.extensionTypedMethodName)
                     ;
 
                 foreach (var (extensionTypedMethodName, extensionMethodBaseExtension) in pairs)
@@ -486,7 +486,7 @@ namespace System
             {
                 var pairs = departedExtensionMethodBaseExtensions
                     .Select(x => (extensionTypedMethodName: Instances.MethodNameOperator.GetExtensionTypedMethodName(x.NamespacedTypedParameterizedMethodName), extensionMethodBaseExtension: x))
-                    .OrderAlphabetically(x => x.extensionTypedMethodName)
+                    .OrderAlphabetically2(x => x.extensionTypedMethodName)
                     ;
 
                 foreach (var (extensionTypedMethodName, extensionMethodBaseExtension) in pairs)
@@ -686,7 +686,7 @@ namespace System
             var invalidMappings = _.GetMappingsWithInvalidEmb(
                 toEmbMappings,
                 embs)
-                .AppendRange(_.GetMappingsWithInvalidEmbExtension(
+                .AppendRange2(_.GetMappingsWithInvalidEmbExtension(
                     toEmbMappings,
                     embExtensions));
 
@@ -706,7 +706,7 @@ namespace System
             var invalidMappings = _.GetMappingsWithInvalidProject(
                 toProjectMappings,
                 projects)
-                .AppendRange(_.GetMappingsWithInvalidEmbExtension(
+                .AppendRange2(_.GetMappingsWithInvalidEmbExtension(
                     toProjectMappings,
                     embExtensions));
 
@@ -987,7 +987,7 @@ namespace System
                     var namespaceWasGuessed = false;
 
                     var availableNamespaceNames = usingDirectivesSpecification.UsingNamespaceNames
-                        .AppendRange(
+                        .AppendRange2(
                             Instances.NamespaceName.EnumerateNamespaceAndSubNamespaces(extensionMethodTuple.Namespace.Name.ToString()));
 
                     foreach (var namespaceName in availableNamespaceNames)
@@ -1091,7 +1091,7 @@ namespace System
         {
             var output = existingToProjectMappings
                 .Except(oldToProjectMappings)
-                .AppendRange(newToProjectMappings)
+                .AppendRange2(newToProjectMappings)
                 .ToArray()
                 ;
 
@@ -1345,7 +1345,7 @@ namespace System
         {
             var output = new List<ExtensionMethodBaseExtensionProjectedTuple>();
 
-            foreach (var pair in unignoredProjectsByDirectoryPath.OrderAlphabetically(xPair => xPair.Key))
+            foreach (var pair in unignoredProjectsByDirectoryPath.OrderAlphabetically2(xPair => xPair.Key))
             {
                 var projectDirectoryPath = pair.Key;
 
